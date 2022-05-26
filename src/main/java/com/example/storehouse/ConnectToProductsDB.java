@@ -7,4 +7,5 @@ public class ConnectToProductsDB {
     protected String dbPass = "madrid12";
     protected static String dbName = "Storehouse";
 
+
 }
