@@ -1,6 +1,6 @@
 package com.example.storehouse;
 
-public class Const {
+public class UtilConst {
     public static final String DB_NAME = "Storehouse";
     public static final String PRODUCT_TABLE = "Products";
     public static final String PRODUCTS_NAME = "name";

@@ -58,14 +58,21 @@ public class Product {
         this.idProduct = idProduct;
     }
 
+    public String productNoFound() {
+        return "Sorry, product wasn't found!";
+    }
+
     @Override
     public String toString() {
-        return "Product{" +
-                ", ID=" + idProduct +
-                "nameOfProduct='" + nameOfProduct + '\'' +
-                ", quantity=" + quantity +
-                ", dateOfManufacture=" + dateOfManufacture +
-                ", daysToExpire=" + daysToExpire +
-                '}';
+        return "<p>" + "Product :" + "</p>" +
+                "<p>" + "Name = " + nameOfProduct +  "</p>" +
+                "<p>" + "Quantity = " + quantity + "</p>" +
+                "<p>" + "Date of manufacture = "
+                + dateOfManufacture.getYear() + "-"
+                + dateOfManufacture.getMonth() + "-"
+                + dateOfManufacture.getDayOfMonth() + " Time: "
+                + dateOfManufacture.getHour() + ":"+
+                + dateOfManufacture.getMinute() +  "</p>" +
+                "<p>" + "Days to expire = " + daysToExpire + "</p>";
     }
 }
