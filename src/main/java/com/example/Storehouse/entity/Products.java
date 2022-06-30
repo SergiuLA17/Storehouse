@@ -15,7 +15,6 @@ public class Products {
     private int quantity;
     private LocalDateTime dateOfManufacture;
     private int daysToExpire;
-
     public Products(int idProduct, String nameOfProduct, int quantity, LocalDateTime dateOfManufacture, int daysToExpire) {
         this.idProduct = idProduct;
         this.name = nameOfProduct;
@@ -69,6 +68,14 @@ public class Products {
 
     public String productNoFound() {
         return "Sorry, product wasn't found!";
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

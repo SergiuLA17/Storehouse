@@ -1,6 +1,8 @@
 package com.example.Storehouse.controllers;
 
-import com.example.Storehouse.exception.ProductNoFoundException;
+import com.example.Storehouse.entity.Products;
+import com.example.Storehouse.exception.ProductNotfoundException;
+import com.example.Storehouse.model.Product;
 import com.example.Storehouse.service.StorehouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +17,13 @@ public class MainController {
     private StorehouseService storehouseService;
 
     @GetMapping(path = "/getProduct")
-    public ResponseEntity getProduct(@RequestParam("name") String name)  {
+    public ResponseEntity getProduct(@RequestParam("name") String name) {
+        Products product = storehouseService.findByName(name);
+
         try {
-            return ResponseEntity.ok(storehouseService.getProductByName(name));
-        } catch (ProductNoFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error!");
+            return ResponseEntity.ok(Product.toModel(product));
+        } catch (Exception e) {
+            throw new ProductNotfoundException();
         }
     }
 }
