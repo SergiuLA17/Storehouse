@@ -51,5 +51,13 @@ public class Product {
         this.daysToExpire = daysToExpire;
     }
 
-
+    @Override
+    public String toString() {
+        return "Product{" +
+                "name='" + name + '\'' +
+                ", quantity=" + quantity +
+                ", dateOfManufacture=" + dateOfManufacture +
+                ", daysToExpire=" + daysToExpire +
+                '}';
+    }
 }
