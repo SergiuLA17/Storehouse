@@ -1,19 +1,23 @@
 package com.example.Storehouse.model;
 
 import com.example.Storehouse.entity.Products;
+import com.example.Storehouse.service.StorehouseService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-
+@Component
 public class Product {
-    private  String name;
+    private String name;
     private int quantity;
     private LocalDateTime dateOfManufacture;
     private int daysToExpire;
-
-    public static Product toModel(Products products){
+    @Autowired
+    private StorehouseService storehouseService;
+    public static Product toModel(Products products, int quantity) {
         Product model = new Product();
         model.setName(products.getNameOfProduct());
-        model.setQuantity(products.getQuantity());
+        model.setQuantity(quantity);
         model.setDateOfManufacture(products.getDateOfManufacture());
         model.setDaysToExpire(products.getDaysToExpire());
         return model;
@@ -51,13 +55,5 @@ public class Product {
         this.daysToExpire = daysToExpire;
     }
 
-    @Override
-    public String toString() {
-        return "Product{" +
-                "name='" + name + '\'' +
-                ", quantity=" + quantity +
-                ", dateOfManufacture=" + dateOfManufacture +
-                ", daysToExpire=" + daysToExpire +
-                '}';
-    }
+
 }
