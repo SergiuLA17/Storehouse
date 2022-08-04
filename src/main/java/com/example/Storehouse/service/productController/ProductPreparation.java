@@ -4,7 +4,7 @@ import com.example.Storehouse.service.StorehouseService;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ProductPreparation {
+public class ProductPreparation implements iProductPreparation{
 
     public StorehouseService start(StorehouseService service, String name, int quantity) {
         while (!service.statusApproved().get()) {
