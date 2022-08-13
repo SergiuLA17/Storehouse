@@ -1,38 +1,78 @@
 package com.example.Storehouse.controllers;
-import com.example.Storehouse.entity.Products;
-import com.example.Storehouse.exception.ProductNotfoundException;
-import com.example.Storehouse.model.Product;
-import com.example.Storehouse.service.StorehouseService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import com.example.Storehouse.responseBuilder.multiproduct.MultiProductResponseBuilder;
+import com.example.Storehouse.responseBuilder.quantity.QuantityOfProductResponseBuilder;
+import com.example.Storehouse.responseBuilder.refund.RefundResponseBuilder;
+import com.example.Storehouse.responseBuilder.singleProduct.SingleProductResponseBuilding;
+import com.example.Storehouse.models.request.QuantityOfProductRequest;
+import com.example.Storehouse.models.request.MultiProductRequest;
+import com.example.Storehouse.models.request.RefundRequest;
+import com.example.Storehouse.models.request.SingleProductRequest;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 
-@Controller
 @RestController
+@Api(description = "Storehouse")
 public class MainController {
     @Autowired
-    private StorehouseService storehouseService;
-    private final Logger logger = LoggerFactory.getLogger(MainController.class);
+    SingleProductResponseBuilding singleProductResponse;
+    @Autowired
+    MultiProductResponseBuilder multiProductResponse;
+    @Autowired
+    QuantityOfProductResponseBuilder quantityOfProductResponse;
+    @Autowired
+    RefundResponseBuilder refundResponse;
 
-    @GetMapping(path = "/getProduct")
-    public ResponseEntity getProduct(@RequestParam("name") String name, @RequestParam("quantity") int quantity) {
-        Products product = storehouseService.findByName(name);
-        Products productForUpdate = storehouseService.findByName(name);
-        logger.info("Request to purchase " + quantity + " kg of " + name);
 
-        if (storehouseService.checkQuantityProduct(product, quantity)) {
-            storehouseService.updateProductWhenPurchased(productForUpdate, quantity);
-            try {
-                return ResponseEntity.ok(Product.toModel(product, quantity));
-            } catch (Exception e) {
-                throw new ProductNotfoundException();
-            }
-        } else
-            storehouseService.updateProductWhenProductNotFound(product);
-        throw new ProductNotfoundException();
+    @PostMapping("/getProduct")
+    @ResponseBody
+    public ResponseEntity<?> getProduct(@RequestBody(required = false) SingleProductRequest request) {
+        singleProductResponse.dataPreparation(request);
+
+        singleProductResponse.build();
+
+        singleProductResponse.buildCompletedSuccessfully();
+
+        return ResponseEntity.ok(singleProductResponse.getResponse());
+    }
+
+    @PostMapping("/getMultipleProducts")
+    @ResponseBody
+    public ResponseEntity<?> getMultipleProducts(@RequestBody(required = false) MultiProductRequest request) {
+        multiProductResponse.dataPreparation(request);
+
+        multiProductResponse.build();
+
+        multiProductResponse.buildCompletedSuccessfully();
+
+       return ResponseEntity.ok(multiProductResponse.getResponse());
+    }
+
+    @PostMapping("/getQuantity")
+    @ResponseBody
+    public ResponseEntity<?> getQuantity(@RequestBody(required = false) QuantityOfProductRequest request) {
+        quantityOfProductResponse.dataPreparing(request);
+
+        quantityOfProductResponse.build();
+
+        quantityOfProductResponse.buildCompletedSuccessfully();
+
+        return ResponseEntity.ok(quantityOfProductResponse.getResponse());
+    }
+
+    @PostMapping("/returnProduct")
+    @ResponseBody
+    public ResponseEntity<?> getReturnedProduct(@RequestBody(required = false) RefundRequest request) {
+        refundResponse.dataProcessing(request);
+
+        refundResponse.build();
+
+        refundResponse.buildCompletedSuccessfully();
+
+        return ResponseEntity.ok(refundResponse.getResponse());
     }
 }
+
