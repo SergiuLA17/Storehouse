@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class StorehouseService {
+public class StorehouseService implements iStorehouseService{
     @Autowired
-    Print print;
+    private Print print;
     @Autowired
-    ProductRepository repository;
+    private ProductRepository repository;
     @Autowired
-    RefundProductRepository refundRepository;
+    private RefundProductRepository refundRepository;
 
 
     public void updateDataBase(String name, int quantity) {
@@ -33,13 +33,11 @@ public class StorehouseService {
             return product;
         } else {
             throw new ProductNotFoundException("No found product or wrong name, Request product name: " + name);
-
         }
     }
 
     public void updateQuantityProduct(String name) {
         Optional<Products> product = findByName(name);
-
         if (product.isPresent()) {
             product.get().setQuantity(500);
             print.info(name + " quantity has been update, now quantity of " + name + " equal to 500");
@@ -52,6 +50,14 @@ public class StorehouseService {
 
     public void saveRefundProduct(RefundProducts product) {
         refundRepository.save(product);
+    }
+
+    public int getQuantityOfProduct(String name){
+        Optional<Products> product = findByName(name);
+        if(product.isPresent()){
+            return product.get().getQuantity();
+        }else
+            throw new ProductNotFoundException("No found product or wrong name, Request product name: " + name);
     }
 }
 

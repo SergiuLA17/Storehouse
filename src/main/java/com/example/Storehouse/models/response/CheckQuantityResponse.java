@@ -2,14 +2,13 @@ package com.example.Storehouse.models.response;
 
 import lombok.Builder;
 import lombok.Data;
+
 import java.util.UUID;
 
-@Data
 @Builder
-
-public class RefundResponse {
+@Data
+public class CheckQuantityResponse {
     private final UUID requestUUID;
-    private final String message;
-
+    private final String nameOfProduct;
+    private final int quantityOfProduct;
 }
-

@@ -1,13 +1,13 @@
 package com.example.Storehouse.logger;
 
-import com.example.Storehouse.controllers.MainController;
+import com.example.Storehouse.controllers.StorehouseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 public class Print implements iPrint{
-    private final Logger logger = LoggerFactory.getLogger(MainController.class);
+    private final Logger logger = LoggerFactory.getLogger(StorehouseController.class);
 
 
     @Override

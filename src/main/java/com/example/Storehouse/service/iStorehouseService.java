@@ -1,11 +1,14 @@
 package com.example.Storehouse.service;
 
-import com.example.Storehouse.models.response.singleProductResponse.SingleProductResponse;
+import com.example.Storehouse.entity.Products;
+import com.example.Storehouse.entity.RefundProducts;
 
-import java.util.UUID;
+import java.util.Optional;
 
 public interface iStorehouseService {
-    SingleProductResponse processesSingleProductRequest(String name, int quantity, UUID uuid);
-//    MultiProductsResponse buildMultiProductsResponse(RequestMultiProducts request);
-//    QuantityResponse buildingQuantityResponse(UUID uuid, String name);
+    void updateDataBase(String name, int quantity);
+    Optional<Products> findByName(String name);
+    void updateQuantityProduct(String name);
+    void saveRefundProduct(RefundProducts product);
+    int getQuantityOfProduct(String name);
 }

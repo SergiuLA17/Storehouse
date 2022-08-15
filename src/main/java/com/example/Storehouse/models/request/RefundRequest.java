@@ -12,7 +12,7 @@ import java.util.UUID;
 @Jacksonized
 public class RefundRequest
 {
-    protected UUID id;
-    private RefundProducts product;
+    private UUID requestUUID;
+    private RefundProducts refundProduct;
 
 }

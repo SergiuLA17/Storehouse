@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @Entity
-public class RefundProducts  {
+public class RefundProducts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idProduct;

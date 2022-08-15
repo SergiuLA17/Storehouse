@@ -1,7 +1,12 @@
 /.idea/
 /.mvn/
 /lib/
+/target/
 mvnw
 mvnw.cmd
 Storehouse.iml
-/target/
+.DS_Store
+spring-boot-flyway-demo.iml
+/src/.DS_Store
+/src/main/.DS_Store
+/src/main/java/com/.DS_Store
