@@ -1,48 +1,77 @@
 package com.example.Storehouse.service;
 
-import com.example.Storehouse.controllers.MainController;
-import com.example.Storehouse.repository.ProductRepository;
 import com.example.Storehouse.entity.Products;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.example.Storehouse.entity.RefundProducts;
+import com.example.Storehouse.exception.exceptions.ProductNotFoundException;
+import com.example.Storehouse.exception.exceptions.WrongQuantityException;
+import com.example.Storehouse.service.logger.LoggerService;
+import com.example.Storehouse.repository.ProductRepository;
+import com.example.Storehouse.repository.RefundProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-@Component
-public class StorehouseService {
+public class StorehouseService implements iStorehouseService{
     @Autowired
-    private ProductRepository productRepository;
-    private final Logger logger = LoggerFactory.getLogger(MainController.class);
+    private LoggerService loggerService;
+    @Autowired
+    private ProductRepository repository;
+    @Autowired
+    private RefundProductRepository refundRepository;
 
-    public Products findByName(String productName) {
-        return productRepository.findByName(productName);
+    public Iterable<Products> findAll(){
+        return repository.findAll();
     }
 
-    public void updateProductWhenPurchased(Products product, int quantity) {
-        Optional<Products> products = findOne(product.getIdProduct());
-        products.ifPresent(value -> value.setQuantity(value.getQuantity() - quantity));
-        products.ifPresent(value -> productRepository.save(value));
-
+    public void updateDataBase(String name, int quantity) {
+        final Optional<Products> product = findByName(name);
+        product.get().setQuantity(product.get().getQuantity() - quantity);
+        repository.save(product.get());
     }
 
-    public Boolean checkQuantityProduct(Products products, int quantity){
-        return  products.getQuantity() > quantity;
+    public Optional<Products> findByName(String name) {
+         final Optional<Products> product = repository.findByName(name);
+        if (product.isPresent()) {
+            return product;
+        } else {
+            throw new ProductNotFoundException("No found product or wrong name, Request product name: " + name);
+        }
     }
 
-    public void updateProductWhenProductNotFound(Products product) {
-        Optional<Products> products = findOne(product.getIdProduct());
-        products.ifPresent(value -> value.setQuantity(200 + (int) (Math.random() * 500)));
-        products.ifPresent(value -> logger.info("Product <" + value.getNameOfProduct() + "> is over, loading more. Now in store is " + value.getQuantity() + " kg"));
-        products.ifPresent(value -> productRepository.save(value));
+    public void updateQuantityProduct(String name) {
+        final Optional<Products> product = findByName(name);
+        if (product.isPresent()) {
+            product.get().setQuantity(500);
+            loggerService.info(name + " quantity has been update, now quantity of " + name + " equal to 500");
+            repository.save(product.get());
+        } else {
+            throw new ProductNotFoundException("No found product or wrong name, Request product name: " + name);
+
+        }
     }
 
-
-    public Optional<Products> findOne(int id) {
-        return productRepository.findById(id);
+    public void saveRefundProduct(RefundProducts product) {
+        refundRepository.save(product);
     }
 
+    public int getQuantityOfProduct(String name){
+        final Optional<Products> product = findByName(name);
+        if(product.isPresent()){
+            return product.get().getQuantity();
+        }else
+            throw new ProductNotFoundException("No found product or wrong name, Request product name: " + name);
+    }
+
+    public boolean checkIfThereIsEnoughProductQuantity(int quantity, String name) {
+        if (500 < quantity || quantity <= 0) {
+            if (quantity == 0) {
+                throw new WrongQuantityException("Wrong quantity value. Request quantity: " + quantity);
+            } else
+                throw new WrongQuantityException("Sorry, this quantity is too large for our store. Maximum quantity 500");
+        } else
+            return findByName(name).get().getQuantity() > quantity;
+    }
 }
+
